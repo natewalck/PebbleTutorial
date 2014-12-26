@@ -25,6 +25,7 @@ static void update_time() {
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
+  // Updates the time in the text layer whenever the subscribed service sends an update
   update_time();
   
 }
