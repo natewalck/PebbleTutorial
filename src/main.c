@@ -2,10 +2,13 @@
   
 static Window *s_main_window;
 static TextLayer *s_time_layer;
+static TextLayer *s_weather_layer;
+
 static BitmapLayer *s_background_layer;
 static GBitmap *s_background_bitmap;
 
 static GFont s_time_font;
+static GFont s_weather_font;
  
 static void update_time() {
   // Get a tm structure
@@ -36,12 +39,24 @@ static void main_window_load(Window *window) {
   bitmap_layer_set_bitmap(s_background_layer, s_background_bitmap);
   layer_add_child(window_get_root_layer(window), bitmap_layer_get_layer(s_background_layer));
   
+  // Create Temp Layer
+  s_weather_layer = text_layer_create(GRect(0, 130, 144, 25));
+  text_layer_set_background_color(s_weather_layer, GColorClear);
+  text_layer_set_text_color(s_weather_layer, GColorWhite);
+  text_layer_set_text_alignment(s_weather_layer, GTextAlignmentCenter);
+  text_layer_set_text(s_weather_layer, "Loading...");
   
   // Create time TextLayer
   s_time_layer = text_layer_create(GRect(2, 50, 144, 50));
   text_layer_set_background_color(s_time_layer, GColorClear);
   text_layer_set_text_color(s_time_layer, GColorBlack);
   text_layer_set_text(s_time_layer, "00:00");
+  
+  // Create second custom font, apply it and add to Window
+  s_weather_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_PERFECT_DOS_20));
+  text_layer_set_font(s_weather_layer, s_weather_font);
+  layer_add_child(window_get_root_layer(window), text_layer_get_layer(s_weather_layer));
+  
 
    // Create GFont
   s_time_font = fonts_load_custom_font(resource_get_handle(RESOURCE_ID_FONT_PERFECT_DOS_48));
@@ -68,7 +83,12 @@ static void main_window_unload(Window *window) {
   
   // Destroy BitmapLayer
   bitmap_layer_destroy(s_background_layer);
-
+  
+  
+  // Destroy wether elements
+  text_layer_destroy(s_weather_layer);
+  fonts_unload_custom_font(s_weather_font);
+  
   // Destroy TextLayer
   text_layer_destroy(s_time_layer);
   
