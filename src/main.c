@@ -116,7 +116,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
   
   // Read first item
   Tuple *t = dict_read_first(iterator);
- 
+
   // For all items
   while(t != NULL) {
     // Which key was received?
@@ -131,7 +131,7 @@ static void inbox_received_callback(DictionaryIterator *iterator, void *context)
       APP_LOG(APP_LOG_LEVEL_ERROR, "Key %d not recognized!", (int)t->key);
       break;
     }
- 
+
     // Look for next item
     t = dict_read_next(iterator);
   }
